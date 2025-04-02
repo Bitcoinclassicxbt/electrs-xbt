@@ -509,7 +509,7 @@ impl Daemon {
     }
 
     pub fn getblockheader(&self, blockhash: &BlockHash) -> Result<BlockHeader> {
-        header_from_value(self.request("getblockheader", json!([blockhash, /*verbose=*/ 0]))?)
+        header_from_value(self.request("getblockheader", json!([blockhash, /*verbose=*/ false]))?)
     }
 
     pub fn getblockheaders(&self, heights: &[usize]) -> Result<Vec<BlockHeader>> {
@@ -517,7 +517,7 @@ impl Daemon {
         let params_list: Vec<Value> = self
             .requests("getblockhash", &heights)?
             .into_iter()
-            .map(|hash| json!([hash, /*verbose=*/ 0]))
+            .map(|hash| json!([hash, /*verbose=*/ false]))
             .collect();
         let mut result = vec![];
         for h in self.requests("getblockheader", &params_list)? {
