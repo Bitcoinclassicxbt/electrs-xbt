@@ -509,7 +509,7 @@ impl Daemon {
     }
 
     pub fn getblockheader(&self, blockhash: &BlockHash) -> Result<BlockHeader> {
-        header_from_value(self.request("getblockheader", json!([blockhash, /*verbose=*/ false]))?)
+        header_from_value(self.request("getblockheader", json!([blockhash, /*verbose=*/ 0]))?)
     }
 
     pub fn getblockheaders(&self, heights: &[usize]) -> Result<Vec<BlockHeader>> {
@@ -517,7 +517,7 @@ impl Daemon {
         let params_list: Vec<Value> = self
             .requests("getblockhash", &heights)?
             .into_iter()
-            .map(|hash| json!([hash, /*verbose=*/ false]))
+            .map(|hash| json!([hash, /*verbose=*/ 0]))
             .collect();
         let mut result = vec![];
         for h in self.requests("getblockheader", &params_list)? {
@@ -528,7 +528,7 @@ impl Daemon {
 
     pub fn getblock(&self, blockhash: &BlockHash) -> Result<Block> {
         let block =
-            block_from_value(self.request("getblock", json!([blockhash, /*verbose=*/ false]))?)?;
+            block_from_value(self.request("getblock", json!([blockhash, /*verbose=*/ 0]))?)?;
         assert_eq!(block.block_hash(), *blockhash);
         Ok(block)
     }
@@ -540,7 +540,7 @@ impl Daemon {
     pub fn getblocks(&self, blockhashes: &[BlockHash]) -> Result<Vec<Block>> {
         let params_list: Vec<Value> = blockhashes
             .iter()
-            .map(|hash| json!([hash, /*verbose=*/ false]))
+            .map(|hash| json!([hash, /*verbose=*/ 0]))
             .collect();
         let values = self.requests("getblock", &params_list)?;
         let mut blocks = vec![];
@@ -553,7 +553,7 @@ impl Daemon {
     pub fn gettransactions(&self, txhashes: &[&Txid]) -> Result<Vec<Transaction>> {
         let params_list: Vec<Value> = txhashes
             .iter()
-            .map(|txhash| json!([txhash, /*verbose=*/ false]))
+            .map(|txhash| json!([txhash, /*verbose=*/ 0]))
             .collect();
 
         let values = self.requests("getrawtransaction", &params_list)?;
@@ -569,18 +569,18 @@ impl Daemon {
         &self,
         txid: &Txid,
         blockhash: &BlockHash,
-        verbose: bool,
+        verbose: u32,
     ) -> Result<Value> {
-        self.request("getrawtransaction", json!([txid, verbose, blockhash]))
+        self.request("getrawtransaction", json!([txid, verbose]))
     }
 
     pub fn getmempooltx(&self, txhash: &Txid) -> Result<Transaction> {
-        let value = self.request("getrawtransaction", json!([txhash, /*verbose=*/ false]))?;
+        let value = self.request("getrawtransaction", json!([txhash, /*verbose=*/ 0]))?;
         tx_from_value(value)
     }
 
     pub fn getmempooltxids(&self) -> Result<HashSet<Txid>> {
-        let res = self.request("getrawmempool", json!([/*verbose=*/ false]))?;
+        let res = self.request("getrawmempool", json!([/*verbose=*/ 0]))?;
         Ok(serde_json::from_value(res).chain_err(|| "invalid getrawmempool reply")?)
     }
 

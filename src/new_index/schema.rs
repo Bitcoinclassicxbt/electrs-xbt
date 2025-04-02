@@ -893,7 +893,7 @@ impl ChainQuery {
             // TODO fetch transaction as binary from REST API instead of as hex
             let txval = self
                 .daemon
-                .gettransaction_raw(txid, blockhash, false)
+                .gettransaction_raw(txid, blockhash, 0)
                 .ok()?;
             let txhex = txval.as_str().expect("valid tx from bitcoind");
             Some(Bytes::from_hex(txhex).expect("valid tx from bitcoind"))
