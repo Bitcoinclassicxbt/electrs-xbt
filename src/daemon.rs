@@ -540,7 +540,7 @@ impl Daemon {
     pub fn getblocks(&self, blockhashes: &[BlockHash]) -> Result<Vec<Block>> {
         let params_list: Vec<Value> = blockhashes
             .iter()
-            .map(|hash| json!([hash, /*verbose=*/ 0]))
+            .map(|hash| json!([hash, /*verbose=*/ false]))
             .collect();
         let values = self.requests("getblock", &params_list)?;
         let mut blocks = vec![];
