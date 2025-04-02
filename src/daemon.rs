@@ -580,7 +580,7 @@ impl Daemon {
     }
 
     pub fn getmempooltxids(&self) -> Result<HashSet<Txid>> {
-        let res = self.request("getrawmempool", json!([/*verbose=*/ 0]))?;
+        let res = self.request("getrawmempool", json!([/*verbose=*/ false]))?;
         Ok(serde_json::from_value(res).chain_err(|| "invalid getrawmempool reply")?)
     }
 
