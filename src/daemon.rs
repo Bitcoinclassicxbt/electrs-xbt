@@ -528,12 +528,12 @@ impl Daemon {
 
     pub fn getblock(&self, blockhash: &BlockHash) -> Result<Block> {
         let block =
-            block_from_value(self.request("getblock", json!([blockhash, /*verbose=*/ 0]))?)?;
+            block_from_value(self.request("getblock", json!([blockhash, /*verbose=*/ false]))?)?;
         assert_eq!(block.block_hash(), *blockhash);
         Ok(block)
     }
 
-    pub fn getblock_raw(&self, blockhash: &BlockHash, verbose: u32) -> Result<Value> {
+    pub fn getblock_raw(&self, blockhash: &BlockHash, verbose: bool) -> Result<Value> {
         self.request("getblock", json!([blockhash, verbose]))
     }
 

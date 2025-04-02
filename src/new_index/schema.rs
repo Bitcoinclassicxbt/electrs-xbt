@@ -376,7 +376,7 @@ impl ChainQuery {
 
         if self.light_mode {
             // TODO fetch block as binary from REST API instead of as hex
-            let mut blockinfo = self.daemon.getblock_raw(hash, 1).ok()?;
+            let mut blockinfo = self.daemon.getblock_raw(hash, true).ok()?;
             Some(serde_json::from_value(blockinfo["tx"].take()).unwrap())
         } else {
             self.store
@@ -390,7 +390,7 @@ impl ChainQuery {
         let _timer = self.start_timer("get_block_meta");
 
         if self.light_mode {
-            let blockinfo = self.daemon.getblock_raw(hash, 1).ok()?;
+            let blockinfo = self.daemon.getblock_raw(hash, true).ok()?;
             Some(serde_json::from_value(blockinfo).unwrap())
         } else {
             self.store
@@ -404,7 +404,7 @@ impl ChainQuery {
         let _timer = self.start_timer("get_block_raw");
 
         if self.light_mode {
-            let blockval = self.daemon.getblock_raw(hash, 0).ok()?;
+            let blockval = self.daemon.getblock_raw(hash, false).ok()?;
             let blockhex = blockval.as_str().expect("valid block from bitcoind");
             Some(Vec::from_hex(blockhex).expect("valid block from bitcoind"))
         } else {
