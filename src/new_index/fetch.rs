@@ -194,10 +194,7 @@ fn parse_blocks(blob: Vec<u8>, magic: u32) -> Result<Vec<SizedBlock>> {
         let offset = cursor.position();
         match u32::consensus_decode(&mut cursor) {
             Ok(value) => {
-                println!(
-                    "Checking magic at offset {}: read value = {:#010x}, expected magic = {:#010x}",
-                    offset, value, magic
-                );
+               
                 if magic != value {
                     cursor.set_position(offset + 1);
                     continue;
